@@ -7,7 +7,7 @@ export default function Profile({ user }) {
     return <div className="login-container" >
         <div className="login-box" >
             <div className="login-header" >
-                <img className="img-logo" src="https://res.cloudinary.com/dacjpaubk/image/upload/v1651204411/logo.png" alt='Image' />
+                <img className="img-logo" src="https://res.cloudinary.com/dacjpaubk/image/upload/v1651204411/logo.png" alt='Logo App' />
                 <h5 className="mb-75px" > login user email address</h5 >
             </div >
             <div id="error-message" className="alert alert-danger" ></div >
