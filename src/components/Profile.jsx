@@ -12,7 +12,7 @@ export default function Profile({ user }) {
             </div >
             <div id="error-message" className="alert alert-danger" ></div >
 
-            <form onsubmit="return false;" method="post" id="form-auth" className='mb-5'>
+            <form method="post" id="form-auth" className='mb-5'>
                 <div className="row">
                     <div className="col-md-6">
                         <div className="form-group">
