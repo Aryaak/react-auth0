@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Sign In with Auth0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<style>
+    body,
+    html {
+        height: 100%;
+        background-color: #f9f9f9;
+    }
+
+    .login-container {
+        position: relative;
+        height: 100%;
+    }
+
+    .login-box {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        padding: 15px;
+        background-color: #fff;
+        box-shadow: 0px 5px 5px #ccc;
+        border-radius: 5px;
+        border-top: 1px solid #e9e9e9;
+    }
+
+    .login-header {
+        text-align: center;
+    }
+
+
+
+    #error-message {
+        display: none;
+        white-space: break-spaces;
+    }
+
+    .img-logo {
+        display: block;
+        margin: auto;
+    }
+
+
+
+    .login-box {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 745px;
+        padding: 55px 100px;
+        background: rgb(243, 245, 248, .5);
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        box-sizing: border-box;
+        box-shadow: 5px 10px 7px rgba(0, 0, 0, 0.25);
+    }
+
+    h5,
+    p {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+        color: #6D6B6B;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .text-form {
+        background: #FFFFFF;
+        border: 1px solid #C4C4C4;
+        box-sizing: border-box;
+        border-radius: 9px;
+        padding: 15px;
+        text-align: center;
+        width: 100%;
+    }
+
+    .text-left {
+        text-align: left !important;
+    }
+
+    .mb-35px {
+        margin-bottom: 35px;
+    }
+
+    .mb-75px {
+        margin-bottom: 75px;
+    }
+
+    #btn-google {
+        background: #FFFFFF;
+        font-weight: bolder;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        text-align: center;
+        border-radius: 9px;
+        margin: auto;
+        display: block;
+        padding: 20px;
+        width: 338px;
+    }
+
+    #btn-signup,
+    #btn-login,
+    #btn-forgot {
+        background: #343370;
+        border: 1px solid #C4C4C4;
+        box-sizing: border-box;
+        color: white;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        width: 254px;
+        padding: 12px;
+        margin: auto;
+        display: block;
+        border-radius: 9px;
+        text-align: center;
+    }
+
+
+    .d-flex {
+        display: flex;
+    }
+
+    .text-success {
+        color: #3DBD01;
+    }
+
+    .d-none {
+        display: none !important;
+    }
+</style>
+
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <img class="img-logo" src="https://res.cloudinary.com/dacjpaubk/image/upload/v1651204411/logo.png" />
+                <h5 class="mb-75px">Register into SkyPearl iNfotech</h5>
+            </div>
+            <div id="error-message" class="alert alert-danger"></div>
+            <div class="d-none" id="forgot-password-group">
+                <div class="form-group mb-35px ">
+                    <input type="email" id="email-verify" class="text-form" placeholder="Registered Email Address">
+                </div>
+                <button type="button" id="btn-forgot" onclick="verifyEmail()">
+                    Submit
+                </button>
+                &nbsp;
+                <p class="text-center" onclick="forgotPassword()">Back to Login</p>
+            </div>
+
+            <form onsubmit="return false;" method="post" id="form-auth">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input type="text" class="text-form" id="firstname" placeholder="Firstname">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group  mb-35px">
+                            <input type="text" class="text-form" id="lastname" placeholder="Lastname">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-35px ">
+                    <input type="email" id="email" class="text-left text-form" placeholder="Work email">
+                </div>
+                <div class="form-group mb-35px ">
+                    <input type="password" id="password" class="text-left text-form" placeholder="Password">
+                </div>
+                <p id="forgot-password" class="d-none text-right" onclick="forgotPassword(true)">Forgot your password
+                </p>
+                <div id="verify" class="form-group mb-35px d-flex">
+                    <input type="checkbox" id="checkbox" class="text-left mr-5px">
+                    <label for="checkbox">Yes,keep me infomed about databenstalk.By signing up you agree to our <span
+                            class="text-success">terms</span>
+                        and
+                        <span class="text-success">policies</span>.</label>
+                </div>
+                <div class="captcha-container form-group mb-35px "></div>
+                <button type="submit" id="btn-login" class="btn d-none">
+                    Log In
+                </button>
+                <button type="button" id="btn-signup" class="">
+                    Create New Account
+                </button>
+                &nbsp;
+                <div class="text-center">
+                    <span>- OR -</span>
+                </div>
+                &nbsp;
+                <button type="button" id="btn-google">
+                    <img width="25"
+                        src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-webinar-optimizing-for-success-google-business-webinar-13.png">
+                    Continue with Google
+                </button>
+            </form>
+            &nbsp;
+
+            <p id="alert-signin" class="text-center">Already have an account? <span class="text-success"
+                    onclick="changeType('signin')">Login</span></p>
+
+            <p id="alert-signup" class="text-center d-none">Not have an account? <span class="text-success"
+                    onclick="changeType('signup')">Register</span></p>
+        </div>
+    </div>
+
+    <!--[if IE 8]>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/ie8/0.2.5/ie8.js"></script>
+  <![endif]-->
+
+    <!--[if lte IE 9]>
+  <script src="https://cdn.auth0.com/js/polyfills/1.0/base64.min.js"></script>
+  <script src="https://cdn.auth0.com/js/polyfills/1.0/es5-shim.min.js"></script>
+  <![endif]-->
+
+    <script src="https://cdn.auth0.com/js/auth0/9.18/auth0.min.js"></script>
+    <script src="https://cdn.auth0.com/js/polyfills/1.0/object-assign.min.js"></script>
+    <script>
+        let type = 'signin';
+
+        const verifyEmail = async () => {
+
+            const response = await fetch('https://dev-4-dmucja.us.auth0.com/dbconnections/change_password', {
+                method: 'POST',
+                mode: 'cors',
+                cache: 'no-cache',
+                credentials: 'same-origin',
+                headers: { 'content-type': 'application/json' },
+                redirect: 'follow',
+                referrerPolicy: 'no-referrer',
+                body: JSON.stringify({
+                    client_id: 'gawxDLcFzK7HKuXyRETEe7ktDJk2wwLt',
+                    email: document.getElementById('email-verify').value,
+                    connection: 'Username-Password-Authentication'
+                })
+            });
+            response.json()
+        }
+
+        const forgotPassword = (bool) => {
+            if (bool) {
+                document.getElementById('forgot-password-group').classList.remove('d-none')
+                document.getElementById('form-auth').style.display = 'none'
+                document.getElementById('alert-signin').classList.add('d-none')
+                document.getElementById('alert-signup').classList.add('d-none')
+                Array.from(document.getElementsByTagName('h5'))[0].innerText = 'Forgot Password'
+            } else {
+                document.getElementById('forgot-password-group').classList.add('d-none')
+                document.getElementById('form-auth').style.display = 'block'
+                document.getElementById('alert-signup').classList.remove('d-none')
+                Array.from(document.getElementsByTagName('h5'))[0].innerText = 'Login into SkyPearl iNfotech'
+            }
+        }
+
+        const changeType = (newType) => {
+            type = newType
+            console.log(Array.from(document.getElementsByTagName('h5'))[0])
+            switch (type) {
+                case 'signin':
+                    document.getElementById('firstname').style.display = 'none'
+                    document.getElementById('lastname').style.display = 'none'
+                    document.getElementById('email').setAttribute('placeholder', 'Username')
+                    document.getElementById('email').classList.remove('text-left')
+                    document.getElementById('password').classList.remove('text-left')
+                    document.getElementById('verify').style.display = 'none'
+                    document.getElementById('btn-signup').style.display = 'none'
+                    document.getElementById('alert-signin').classList.add('d-none')
+                    document.getElementById('alert-signup').classList.remove('d-none')
+                    document.getElementById('btn-login').classList.remove('d-none')
+                    document.getElementById('forgot-password').classList.remove('d-none')
+                    Array.from(document.getElementsByTagName('h5'))[0].innerText = 'Login into SkyPearl iNfotech'
+                    break;
+
+                case 'signup':
+                    document.getElementById('verify').style.display = 'flex'
+                    document.getElementById('firstname').style.display = 'block'
+                    document.getElementById('lastname').style.display = 'block'
+                    document.getElementById('email').setAttribute('placeholder', 'Work email')
+                    document.getElementById('email').classList.add('text-left')
+                    document.getElementById('password').classList.add('text-left')
+                    document.getElementById('btn-signup').style.display = 'block'
+                    document.getElementById('btn-login').classList.add('d-none')
+                    document.getElementById('forgot-password').classList.add('d-none')
+                    Array.from(document.getElementsByTagName('h5'))[0].innerText = 'Register into SkyPearl iNfotech'
+                    document.getElementById('alert-signup').classList.add('d-none')
+                    document.getElementById('alert-signin').classList.remove('d-none')
+                    break;
+            }
+        }
+
+        window.addEventListener('load', function () {
+
+
+
+            var config = JSON.parse(
+                decodeURIComponent(escape(window.atob('@@config@@')))
+            );
+
+            var leeway = config.internalOptions.leeway;
+            if (leeway) {
+                var convertedLeeway = parseInt(leeway);
+
+                if (!isNaN(convertedLeeway)) {
+                    config.internalOptions.leeway = convertedLeeway;
+                }
+            }
+
+            var params = Object.assign({
+                overrides: {
+                    __tenant: config.auth0Tenant,
+                    __token_issuer: config.authorizationServer.issuer
+                },
+                domain: config.auth0Domain,
+                clientID: config.clientID,
+                redirectUri: config.callbackURL,
+                responseType: 'code'
+            }, config.internalOptions);
+
+            var webAuth = new auth0.WebAuth(params);
+            var databaseConnection = 'Username-Password-Authentication';
+            var captcha = webAuth.renderCaptcha(
+                document.querySelector('.captcha-container')
+            );
+
+            function login(e) {
+                e.preventDefault();
+                var button = this;
+                var username = document.getElementById('email').value;
+                var password = document.getElementById('password').value;
+                button.disabled = true;
+                webAuth.login({
+                    realm: databaseConnection,
+                    username: username,
+                    password: password,
+                    captcha: captcha.getValue()
+                }, function (err) {
+                    if (err) displayError(err);
+                    button.disabled = false;
+                });
+            }
+
+            function signup() {
+                var button = this;
+                var firstname = document.getElementById('firstname').value;
+                var lastname = document.getElementById('lastname').value;
+                var email = document.getElementById('email').value;
+                var password = document.getElementById('password').value;
+
+                button.disabled = true;
+                webAuth.redirect.signupAndLogin({
+                    connection: databaseConnection,
+                    firstname: firstname,
+                    lastname: lastname,
+                    email: email,
+                    password: password,
+                    captcha: captcha.getValue()
+                }, function (err) {
+                    if (err) displayError(err);
+                    button.disabled = false;
+                });
+            }
+
+            function loginWithGoogle() {
+                webAuth.authorize({
+                    connection: 'google-oauth2'
+                }, function (err) {
+                    if (err) displayError(err);
+                });
+            }
+
+            function displayError(err) {
+                captcha.reload();
+                var errorMessage = document.getElementById('error-message');
+                errorMessage.innerHTML = err.policy || err.description;
+                errorMessage.style.display = 'block';
+            }
+
+            document.getElementById('btn-login').addEventListener('click', login);
+            document.getElementById('btn-google').addEventListener('click', loginWithGoogle);
+            document.getElementById('btn-signup').addEventListener('click', signup);
+        });
+    </script>
+</body>
+
+</html>

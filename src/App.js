@@ -1,25 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import LoginButton from './components/LoginButton'
+import { useAuth0 } from '@auth0/auth0-react'
+import Profile from './components/Profile'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+export default function App() {
+
+  const { isAuthenticated, user } = useAuth0()
+
+  return <>
+    {!isAuthenticated && <>
+      <h1>SkyPearl Infotech</h1>
+      <LoginButton />
+    </>}
+    {isAuthenticated && <Profile user={user} />}
+
+  </>
 }
-
-export default App;
