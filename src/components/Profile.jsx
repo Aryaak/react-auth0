@@ -4,7 +4,6 @@ import LogoutButton from './LogoutButton'
 
 export default function Profile({ user }) {
 
-    const { logout } = useAuth0()
 
     return <div className="login-container" >
         <div className="login-box" >
